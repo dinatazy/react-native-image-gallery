@@ -40,8 +40,15 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
 
+    gridfooter:{
+        width: width,
+        flex: 0.09,
+        backgroundColor: '#141414',
+    },
+
     gridView: {
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        flex:1,
     },
 
     imageContainer: {
