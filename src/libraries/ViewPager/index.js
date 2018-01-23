@@ -5,7 +5,9 @@ import {
     ViewPropTypes,
     InteractionManager,
     Dimensions,
-    Text
+    Text,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 import PropTypes from 'prop-types';
 import Scroller from '../Scroller';
@@ -165,7 +167,7 @@ export default class ViewPager extends PureComponent {
 
     onPageChanged(page) {
         this.setState({
-            currentPage: page+1
+            currentPage: page + 1
         })
         if (this.currentPage !== page) {
             this.currentPage = page;
@@ -321,34 +323,46 @@ export default class ViewPager extends PureComponent {
         }
 
         return (
-            <View
-                {...this.props}
-                style={[style, { flex: 1 }]}
-                {...gestureResponder}>
+            <View style={{ flex: 1 }}>
                 <View style={styles.header} >
                     <Text style={styles.title}>{currentPage} von {pageDataArray.length}</Text>
                 </View>
-                <FlatList
-                    {...this.props.flatListProps}
-                    style={[{ flex: 1 }, scrollViewStyle]}
-                    ref={'innerFlatList'}
-                    keyExtractor={this.keyExtractor}
-                    scrollEnabled={false}
-                    horizontal={true}
-                    data={pageDataArray}
-                    renderItem={this.renderRow}
-                    onLayout={this.onLayout}
-                    // use contentOffset instead of initialScrollIndex so that we don't have
-                    // to use the buggy 'getItemLayout' prop. See
-                    // https://github.com/facebook/react-native/issues/15734#issuecomment-330616697 and
-                    // https://github.com/facebook/react-native/issues/14945#issuecomment-354651271
-                    contentOffset={{ x: this.getScrollOffsetOfPage(parseInt(this.props.initialPage)), y: 0 }}
-                />
-                 <View style={styles.footer} >
-                    
+                <View
+                    {...this.props}
+                    style={[style, { flex: 1 }]}
+                    {...gestureResponder}>
+                    <FlatList
+                        {...this.props.flatListProps}
+                        style={[{ flex: 1 }, scrollViewStyle]}
+                        ref={'innerFlatList'}
+                        keyExtractor={this.keyExtractor}
+                        scrollEnabled={false}
+                        horizontal={true}
+                        data={pageDataArray}
+                        renderItem={this.renderRow}
+                        onLayout={this.onLayout}
+                        // use contentOffset instead of initialScrollIndex so that we don't have
+                        // to use the buggy 'getItemLayout' prop. See
+                        // https://github.com/facebook/react-native/issues/15734#issuecomment-330616697 and
+                        // https://github.com/facebook/react-native/issues/14945#issuecomment-354651271
+                        contentOffset={{ x: this.getScrollOffsetOfPage(parseInt(this.props.initialPage)), y: 0 }}
+                    />
                 </View>
-                 <View style={styles.footer2} >
-                    
+                <View style={styles.footer} >
+                </View>
+                <View style={styles.footer2} >
+                    <View />
+                    <TouchableOpacity
+                        onPress={() => this.scrollToPage(currentPage - 2)}
+                    >
+                        <Image style={{ width: 15, height: 15 }} source={require('../../../image/prev.png')} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.scrollToPage(currentPage)}
+                    >
+                        <Image style={{ width: 15, height: 15 }} source={require('../../../image/next.png')} />
+                    </TouchableOpacity>
+                    <View />
                 </View>
             </View>
         );
