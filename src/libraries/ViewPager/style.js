@@ -32,11 +32,12 @@ export const styles = StyleSheet.create({
         borderColor:'#242424',
     },
     footer2:{
+        flexDirection:'row',
         width: width,
         flex: 0.09,
         backgroundColor: '#141414',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
 
 })
