@@ -351,7 +351,11 @@ export default class ViewPager extends PureComponent {
                 <View style={styles.footer} >
                 </View>
                 <View style={styles.footer2} >
-                    <View />
+                    <TouchableOpacity
+                        onPress={() => { }}
+                    >
+                        <Image style={{ width: 30, height: 30 }} source={require('../../../image/grid.png')} />
+                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => this.scrollToPage(currentPage - 2)}
                     >
