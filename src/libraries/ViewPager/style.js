@@ -19,25 +19,40 @@ export const styles = StyleSheet.create({
     title: {
         color: 'white',
         fontWeight: 'bold',
-        marginBottom:10,
+        marginBottom: 10,
     },
 
-    footer:{
+    footer: {
         width: width,
         flex: 0.09,
         backgroundColor: '#141414',
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomWidth:0.3,
-        borderColor:'#242424',
+        borderBottomWidth: 0.3,
+        borderColor: '#242424',
     },
-    footer2:{
-        flexDirection:'row',
+    footer2: {
+        flexDirection: 'row',
         width: width,
         flex: 0.09,
         backgroundColor: '#141414',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+
+    gridView: {
+        backgroundColor: 'black'
+    },
+
+    imageContainer: {
+        justifyContent: 'flex-end',
+        padding: 10,
+    },
+
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 5,
+    }
 
 })
