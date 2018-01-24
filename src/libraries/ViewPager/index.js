@@ -314,6 +314,30 @@ export default class ViewPager extends PureComponent {
         })
     }
 
+    openInSlider(item) {
+        let itemIndex = this.getItemIndex(item);
+        this.scrollToPage(itemIndex)
+        this.setState({
+            isGrid: !this.state.isGrid
+        })
+    }
+
+    getItemIndex(item) {
+        const { pageDataArray } = this.props;
+        return pageDataArray.indexOf(item);
+    }
+
+    renderGridItem(item) {
+        return (
+            <TouchableOpacity
+                style={styles.imageContainer}
+                onPress={() => this.openInSlider(item)}
+            >
+                <Image style={styles.image} source={{ uri: item.source.uri }}></Image>
+            </TouchableOpacity>
+        )
+    }
+
     render() {
         const { width, height, currentPage, isGrid } = this.state;
         const { pageDataArray, scrollEnabled, style, scrollViewStyle } = this.props;
@@ -389,23 +413,10 @@ export default class ViewPager extends PureComponent {
                         <GridView
                             style={styles.gridView}
                             itemDimension={100}
-                            spacing={5}
+                            spacing={2}
                             items={pageDataArray}
-                            renderItem={item => (
-                                <View style={styles.imageContainer}>
-                                    <Image style={styles.image} source={{ uri: item.source.uri }}></Image>
-                                </View>
-                            )}
+                            renderItem={(item) => this.renderGridItem(item)}
                         />
-                        <View style={styles.footer} >
-                        </View>
-                        <View style={styles.gridfooter} >
-                            <TouchableOpacity
-                                onPress={() => this.toggleGrid()}
-                            >
-                                <Image style={{ width: 30, height: 30 }} source={require('../../../image/grid.png')} />
-                            </TouchableOpacity>
-                        </View>
                     </View>
                 }
             </View>
