@@ -60,6 +60,18 @@ export const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 5,
+    },
+
+    active:{
+        color:'white'
+    },
+
+    prevBtn: {
+        transform: [{ rotate: '180deg' }],
+    },
+
+    disabled:{
+        color:'grey'
     }
 
 })

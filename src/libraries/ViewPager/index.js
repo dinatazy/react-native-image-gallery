@@ -14,6 +14,7 @@ import Scroller from '../Scroller';
 import { createResponder } from '../GestureResponder';
 import { styles } from './style'
 import GridView from 'react-native-super-grid';
+import Icon from 'react-native-vector-icons/Feather'
 
 const MIN_FLING_VELOCITY = 0.5;
 
@@ -341,7 +342,7 @@ export default class ViewPager extends PureComponent {
     render() {
         const { width, height, currentPage, isGrid } = this.state;
         const { pageDataArray, scrollEnabled, style, scrollViewStyle } = this.props;
-        console.log('my array', pageDataArray)
+        let pagesLength = pageDataArray.length
         if (width && height) {
             let list = pageDataArray;
             if (!list) {
@@ -390,17 +391,19 @@ export default class ViewPager extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => this.toggleGrid()}
                             >
-                                <Image style={{ width: 30, height: 30 }} source={require('../../../image/grid.png')} />
+                                <Icon style={[styles.active, { marginLeft: 10 }]} name="grid" size={25} />
                             </TouchableOpacity>
                             <TouchableOpacity
+                                disabled={currentPage == 1 ? true : false}
                                 onPress={() => this.scrollToPage(currentPage - 2)}
                             >
-                                <Image style={{ width: 15, height: 15 }} source={require('../../../image/prev.png')} />
+                                <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={25} />
                             </TouchableOpacity>
                             <TouchableOpacity
+                                disabled={currentPage == pagesLength ? true : false}
                                 onPress={() => this.scrollToPage(currentPage)}
                             >
-                                <Image style={{ width: 15, height: 15 }} source={require('../../../image/next.png')} />
+                                <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={25} />
                             </TouchableOpacity>
                             <View />
                         </View>
