@@ -10,15 +10,27 @@ let { width, height } = Dimensions.get('window')
 export const styles = StyleSheet.create({
     header: {
         width: width,
+        flexDirection: 'row',
         flex: 0.12,
         backgroundColor: '#141414',
+        alignItems: 'flex-end',
+    },
+
+    titleContainer: {
+        flex: 0.8,
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'flex-end',
     },
 
     title: {
         color: 'white',
         fontWeight: 'bold',
+        marginBottom: 10,
+    },
+
+    closeText: {
+        color: 'white',
+        marginLeft: 10,
         marginBottom: 10,
     },
 
@@ -40,7 +52,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
 
-    gridfooter:{
+    gridfooter: {
         width: width,
         flex: 0.09,
         backgroundColor: '#141414',
@@ -48,7 +60,7 @@ export const styles = StyleSheet.create({
 
     gridView: {
         backgroundColor: 'black',
-        flex:1,
+        flex: 1,
     },
 
     imageContainer: {
@@ -57,21 +69,21 @@ export const styles = StyleSheet.create({
     },
 
     image: {
-        width: 100,
-        height: 100,
+        width: 105,
+        height: 105,
         borderRadius: 5,
     },
 
-    active:{
-        color:'white'
+    active: {
+        color: 'white'
     },
 
     prevBtn: {
         transform: [{ rotate: '180deg' }],
     },
 
-    disabled:{
-        color:'grey'
+    disabled: {
+        color: 'grey'
     }
 
 })

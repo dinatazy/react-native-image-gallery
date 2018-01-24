@@ -34,6 +34,7 @@ export default class ViewPager extends PureComponent {
         initialListSize: PropTypes.number,
         removeClippedSubviews: PropTypes.bool,
         onPageSelected: PropTypes.func,
+        onClose: PropTypes.func,
         onPageScrollStateChanged: PropTypes.func,
         onPageScroll: PropTypes.func,
         flatListProps: PropTypes.object
@@ -176,6 +177,10 @@ export default class ViewPager extends PureComponent {
             this.currentPage = page;
             this.props.onPageSelected && this.props.onPageSelected(page);
         }
+    }
+
+    onClose() {
+        this.props.onClose();
     }
 
     onPageScrollStateChanged(state) {
@@ -339,17 +344,28 @@ export default class ViewPager extends PureComponent {
         )
     }
 
-    render() {
-        const { width, height, currentPage, isGrid } = this.state;
+    renderGrid() {
+        const { pageDataArray, style } = this.props;
+        return (
+            <View style={{ flex: 1 }}>
+                <View style={styles.header} >
+                    <Text style={styles.title}>Grid</Text>
+                </View>
+                <GridView
+                    style={styles.gridView}
+                    itemDimension={105}
+                    spacing={1}
+                    items={pageDataArray}
+                    renderItem={(item) => this.renderGridItem(item)}
+                />
+            </View>
+        );
+    }
+
+    renderPhotoSlider() {
+        const { currentPage } = this.state;
         const { pageDataArray, scrollEnabled, style, scrollViewStyle } = this.props;
         let pagesLength = pageDataArray.length
-        if (width && height) {
-            let list = pageDataArray;
-            if (!list) {
-                list = [];
-            }
-        }
-
         let gestureResponder = this.gestureResponder;
         if (!scrollEnabled || pageDataArray.length <= 0) {
             gestureResponder = {};
@@ -357,70 +373,82 @@ export default class ViewPager extends PureComponent {
 
         return (
             <View style={{ flex: 1 }}>
+                <View style={styles.header} >
+                    <TouchableOpacity
+                        style={{ justifyContent:'center', alignItems:'center'}}
+                        onPress={() => this.onClose()}
+                    >
+                        <Text style={styles.closeText}>SchlieBen</Text>
+                    </TouchableOpacity>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>{currentPage} von {pageDataArray.length}</Text>
+                    </View>
+                </View>
+
+                <View
+                    {...this.props}
+                    style={[style, { flex: 1 }]}
+                    {...gestureResponder}>
+                    <FlatList
+                        {...this.props.flatListProps}
+                        style={[{ flex: 1 }, scrollViewStyle]}
+                        ref={'innerFlatList'}
+                        keyExtractor={this.keyExtractor}
+                        scrollEnabled={false}
+                        horizontal={true}
+                        data={pageDataArray}
+                        renderItem={this.renderRow}
+                        onLayout={this.onLayout}
+                        // use contentOffset instead of initialScrollIndex so that we don't have
+                        // to use the buggy 'getItemLayout' prop. See
+                        // https://github.com/facebook/react-native/issues/15734#issuecomment-330616697 and
+                        // https://github.com/facebook/react-native/issues/14945#issuecomment-354651271
+                        contentOffset={{ x: this.getScrollOffsetOfPage(parseInt(this.props.initialPage)), y: 0 }}
+                    />
+                </View>
+
+                <View style={styles.footer} >
+                </View>
+                <View style={styles.footer2} >
+                    <TouchableOpacity
+                        onPress={() => this.toggleGrid()}
+                    >
+                        <Icon style={[styles.active, { marginLeft: 10 }]} name="grid" size={25} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        disabled={currentPage == 1 ? true : false}
+                        onPress={() => this.scrollToPage(currentPage - 2)}
+                    >
+                        <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={25} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        disabled={currentPage == pagesLength ? true : false}
+                        onPress={() => this.scrollToPage(currentPage)}
+                    >
+                        <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={25} />
+                    </TouchableOpacity>
+                    <View />
+                </View>
+            </View>
+        )
+    }
+
+    render() {
+        const { width, height, currentPage, isGrid } = this.state;
+        const { pageDataArray, scrollEnabled, style, scrollViewStyle } = this.props;
+        if (width && height) {
+            let list = pageDataArray;
+            if (!list) {
+                list = [];
+            }
+        }
+
+        return (
+            <View style={{ flex: 1 }}>
                 {!isGrid ?
-                    <View style={{ flex: 1 }}>
-                        <View style={styles.header} >
-                            <Text style={styles.title}>{currentPage} von {pageDataArray.length}</Text>
-                        </View>
-
-                        <View
-                            {...this.props}
-                            style={[style, { flex: 1 }]}
-                            {...gestureResponder}>
-                            <FlatList
-                                {...this.props.flatListProps}
-                                style={[{ flex: 1 }, scrollViewStyle]}
-                                ref={'innerFlatList'}
-                                keyExtractor={this.keyExtractor}
-                                scrollEnabled={false}
-                                horizontal={true}
-                                data={pageDataArray}
-                                renderItem={this.renderRow}
-                                onLayout={this.onLayout}
-                                // use contentOffset instead of initialScrollIndex so that we don't have
-                                // to use the buggy 'getItemLayout' prop. See
-                                // https://github.com/facebook/react-native/issues/15734#issuecomment-330616697 and
-                                // https://github.com/facebook/react-native/issues/14945#issuecomment-354651271
-                                contentOffset={{ x: this.getScrollOffsetOfPage(parseInt(this.props.initialPage)), y: 0 }}
-                            />
-                        </View>
-
-                        <View style={styles.footer} >
-                        </View>
-                        <View style={styles.footer2} >
-                            <TouchableOpacity
-                                onPress={() => this.toggleGrid()}
-                            >
-                                <Icon style={[styles.active, { marginLeft: 10 }]} name="grid" size={25} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                disabled={currentPage == 1 ? true : false}
-                                onPress={() => this.scrollToPage(currentPage - 2)}
-                            >
-                                <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={25} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                disabled={currentPage == pagesLength ? true : false}
-                                onPress={() => this.scrollToPage(currentPage)}
-                            >
-                                <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={25} />
-                            </TouchableOpacity>
-                            <View />
-                        </View>
-                    </View>
+                    this.renderPhotoSlider()
                     :
-                    <View style={{ flex: 1 }}>
-                        <View style={styles.header} >
-                            <Text style={styles.title}>Grid</Text>
-                        </View>
-                        <GridView
-                            style={styles.gridView}
-                            itemDimension={100}
-                            spacing={2}
-                            items={pageDataArray}
-                            renderItem={(item) => this.renderGridItem(item)}
-                        />
-                    </View>
+                    this.renderGrid()
                 }
             </View>
         );
