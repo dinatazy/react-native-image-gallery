@@ -348,7 +348,7 @@ export default class ViewPager extends PureComponent {
         const { pageDataArray, style } = this.props;
         return (
             <View style={{ flex: 1 }}>
-                <View style={styles.header} >
+                <View style={styles.girdHeader} >
                     <Text style={styles.title}>Grid</Text>
                 </View>
                 <GridView
@@ -375,7 +375,7 @@ export default class ViewPager extends PureComponent {
             <View style={{ flex: 1 }}>
                 <View style={styles.header} >
                     <TouchableOpacity
-                        style={{ justifyContent:'center', alignItems:'center'}}
+                        style={{flex:0.3}}
                         onPress={() => this.onClose()}
                     >
                         <Text style={styles.closeText}>SchlieBen</Text>
@@ -411,22 +411,25 @@ export default class ViewPager extends PureComponent {
                 </View>
                 <View style={styles.footer2} >
                     <TouchableOpacity
+                        style={styles.gridContainer}
                         onPress={() => this.toggleGrid()}
                     >
                         <Icon style={[styles.active, { marginLeft: 10 }]} name="grid" size={25} />
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        disabled={currentPage == 1 ? true : false}
-                        onPress={() => this.scrollToPage(currentPage - 2)}
-                    >
-                        <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={25} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        disabled={currentPage == pagesLength ? true : false}
-                        onPress={() => this.scrollToPage(currentPage)}
-                    >
-                        <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={25} />
-                    </TouchableOpacity>
+                    <View style={styles.arrowContainer}>
+                        <TouchableOpacity
+                            disabled={currentPage == 1 ? true : false}
+                            onPress={() => this.scrollToPage(currentPage - 2)}
+                        >
+                            <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={22} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            disabled={currentPage == pagesLength ? true : false}
+                            onPress={() => this.scrollToPage(currentPage)}
+                        >
+                            <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={22} />
+                        </TouchableOpacity>
+                    </View>
                     <View />
                 </View>
             </View>

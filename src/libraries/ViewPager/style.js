@@ -16,8 +16,16 @@ export const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
 
+    girdHeader: {
+        width: width,
+        flex: 0.12,
+        backgroundColor: '#141414',
+        alignItems: 'center',
+        justifyContent: 'flex-end'
+    },
+
     titleContainer: {
-        flex: 0.8,
+        flex: 0.4,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -49,7 +57,6 @@ export const styles = StyleSheet.create({
         flex: 0.09,
         backgroundColor: '#141414',
         alignItems: 'center',
-        justifyContent: 'space-between',
     },
 
     gridfooter: {
@@ -63,6 +70,10 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
 
+    gridContainer: {
+        flex: 0.3
+    },
+
     imageContainer: {
         justifyContent: 'flex-end',
         padding: 10,
@@ -72,6 +83,12 @@ export const styles = StyleSheet.create({
         width: 105,
         height: 105,
         borderRadius: 5,
+    },
+
+    arrowContainer: {
+        flex: 0.4,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
 
     active: {
