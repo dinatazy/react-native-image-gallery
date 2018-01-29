@@ -220,7 +220,7 @@ export default class Gallery extends PureComponent {
     }
 
     onClose() {
-        this.props.onClose();
+        
     }
 
     onPageScrollStateChanged(state) {
@@ -230,7 +230,7 @@ export default class Gallery extends PureComponent {
         this.props.onPageScrollStateChanged && this.props.onPageScrollStateChanged(state);
     }
 
-    renderPage(pageData, pageId) {
+    renderPage(pageData, pageId, cb) {
         const { onViewTransformed, onTransformGestureReleased, errorComponent, imageComponent } = this.props;
         return (
             <TransformableImage
@@ -238,6 +238,7 @@ export default class Gallery extends PureComponent {
                     onViewTransformed && onViewTransformed(transform, pageId);
                 })}
                 onTransformGestureReleased={((transform) => {
+                    cb(true)
                     // need the 'return' here because the return value is checked in ViewTransformer
                     return onTransformGestureReleased && onTransformGestureReleased(transform, pageId);
                 })}
@@ -260,6 +261,14 @@ export default class Gallery extends PureComponent {
         if (transformer) {
             transformer.forceUpdateTransform({ scale: 1, translateX: 0, translateY: 0 });
         }
+    }
+
+    scrollToPage(page){
+        this.refs.galleryViewPager.scrollToPage(page);
+    }
+
+    toggleGrid() {
+        this.refs.galleryViewPager.toggleGrid();
     }
 
     render() {

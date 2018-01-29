@@ -15,6 +15,7 @@ import { createResponder } from '../GestureResponder';
 import { styles } from './style'
 import GridView from 'react-native-super-grid';
 import Icon from 'react-native-vector-icons/Feather'
+import * as Animatable from 'react-native-animatable';
 
 const MIN_FLING_VELOCITY = 0.5;
 
@@ -60,6 +61,7 @@ export default class ViewPager extends PureComponent {
         height,
         currentPage: 0,
         isGrid: false,
+        viewAnimationDone: false
     };
 
     constructor(props) {
@@ -183,8 +185,51 @@ export default class ViewPager extends PureComponent {
         this.props.onClose();
     }
 
+    animateView(state) {
+       /*  if (this.state.viewAnimationDone) {
+            console.log('state', state, 'fadout')
+            this.fadeOut();
+        } else {
+            console.log('state', state, 'fadein')
+            this.fadeIn();
+        } */
+    }
+
+    fadeIn() {
+        this.refs.animatedView.fadeIn(300)
+            .then((endState) =>
+                console.log(endState.finished ? 'bounce finished' : 'bounce cancelled')
+            );
+        this.refs.animatedHeader.fadeIn(300)
+            .then((endState) =>
+                console.log(endState.finished ? 'bounce finished' : 'bounce cancelled')
+            );
+        this.setState({
+            viewAnimationDone: !this.state.viewAnimationDone
+        })
+    }
+
+    fadeOut() {
+        this.refs.animatedView.fadeOut(300)
+            .then((endState) =>
+                console.log('')
+            );
+        this.refs.animatedHeader.fadeOut(300)
+            .then((endState) =>
+                console.log('')
+            );
+
+        this.setState({
+            viewAnimationDone: !this.state.viewAnimationDone
+        })
+    }
+
     onPageScrollStateChanged(state) {
-        this.props.onPageScrollStateChanged && this.props.onPageScrollStateChanged(state);
+        this.setState({
+            viewAnimationDone: true
+        }, () => {
+            this.props.onPageScrollStateChanged && this.props.onPageScrollStateChanged(state);
+        })
     }
 
     settlePage(vx) {
@@ -282,11 +327,18 @@ export default class ViewPager extends PureComponent {
         return index;
     }
 
+    renderPage(item, index, cb) {
+        let page = this.props.renderPage(item, index, cb);
+        return page
+    }
+
     renderRow({ item, index }) {
         const { width, height } = this.state;
-        //console.log('my index', index)
-        let page = this.props.renderPage(item, index);
-
+        let page = this.renderPage(item, index, (cb) => {
+            if (cb) {
+                this.animateView();
+            }
+        })
         const layout = {
             width,
             height,
@@ -304,7 +356,7 @@ export default class ViewPager extends PureComponent {
                 <View style={{
                     width: width + this.props.pageMargin,
                     height: height,
-                    alignItems: 'flex-end'
+                    alignItems: 'flex-end',
                 }}>
                     {element}
                 </View>
@@ -372,10 +424,10 @@ export default class ViewPager extends PureComponent {
         }
 
         return (
-            <View style={{ flex: 1 }}>
-                <View style={styles.header} >
+            <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+               {/*  <Animatable.View ref='animatedHeader' style={styles.header} >
                     <TouchableOpacity
-                        style={{flex:0.3}}
+                        style={{ flex: 0.3 }}
                         onPress={() => this.onClose()}
                     >
                         <Text style={styles.closeText}>SchlieBen</Text>
@@ -383,7 +435,7 @@ export default class ViewPager extends PureComponent {
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>{currentPage} von {pageDataArray.length}</Text>
                     </View>
-                </View>
+                </Animatable.View > */}
 
                 <View
                     {...this.props}
@@ -407,31 +459,36 @@ export default class ViewPager extends PureComponent {
                     />
                 </View>
 
-                <View style={styles.footer} >
-                </View>
-                <View style={styles.footer2} >
-                    <TouchableOpacity
-                        style={styles.gridContainer}
-                        onPress={() => this.toggleGrid()}
-                    >
-                        <Icon style={[styles.active, { marginLeft: 10 }]} name="grid" size={25} />
-                    </TouchableOpacity>
-                    <View style={styles.arrowContainer}>
-                        <TouchableOpacity
-                            disabled={currentPage == 1 ? true : false}
-                            onPress={() => this.scrollToPage(currentPage - 2)}
-                        >
-                            <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={22} />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            disabled={currentPage == pagesLength ? true : false}
-                            onPress={() => this.scrollToPage(currentPage)}
-                        >
-                            <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={22} />
-                        </TouchableOpacity>
+
+{/*                 <Animatable.View ref='animatedView' style={styles.footer} >
+                    <View style={styles.footer1}>
                     </View>
-                    <View />
-                </View>
+                    <View style={styles.footer2} >
+                        <TouchableOpacity
+                            style={styles.gridContainer}
+                            onPress={() => this.toggleGrid()}
+                        >
+                            <Icon style={[styles.active, { marginLeft: 10 }]} name="grid" size={25} />
+                        </TouchableOpacity>
+                        <View style={styles.arrowContainer}>
+                            <TouchableOpacity
+                                disabled={currentPage == 1 ? true : false}
+                                onPress={() => this.scrollToPage(currentPage - 2)}
+                            >
+                                <Icon style={[currentPage == 1 ? styles.disabled : styles.active, styles.prevBtn]} name="play" size={22} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                disabled={currentPage == pagesLength ? true : false}
+                                onPress={() => this.scrollToPage(currentPage)}
+                            >
+                                <Icon style={currentPage == pagesLength ? styles.disabled : styles.active} name="play" size={22} />
+                            </TouchableOpacity>
+                        </View>
+                        <View />
+
+                    </View>
+                </Animatable.View> */}
+
             </View>
         )
     }
@@ -447,7 +504,7 @@ export default class ViewPager extends PureComponent {
         }
 
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: 'black' }}>
                 {!isGrid ?
                     this.renderPhotoSlider()
                     :

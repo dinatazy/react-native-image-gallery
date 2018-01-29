@@ -44,17 +44,19 @@ export const styles = StyleSheet.create({
 
     footer: {
         width: width,
-        flex: 0.09,
+        flex: 0.18,
         backgroundColor: '#141414',
-        alignItems: 'center',
-        justifyContent: 'center',
         borderBottomWidth: 0.3,
         borderColor: '#242424',
+    },
+    footer1: {
+        flex: 0.5,
+        width: width
     },
     footer2: {
         flexDirection: 'row',
         width: width,
-        flex: 0.09,
+        flex: 0.5,
         backgroundColor: '#141414',
         alignItems: 'center',
     },
